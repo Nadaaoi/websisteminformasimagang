@@ -1,36 +1,32 @@
-@extends('pages.dashboard.layouts.main')
+@extends('Template.main')
 
-
+@section('css')
+    <link rel="stylesheet" href="/css/datatables/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/datatables/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap5.min.css">
+    <style>
+        .fs-x {
+            font-size: smaller;
+            padding: 2px 12px;
+        }
+    </style>
+@endsection
 
 @section('content')
 
-<div class="container-fluid px-4">    
-<h1 class="mt-4">
-  Pengisian Status Pemagangan
-</h1>
+@section('content')
 
-@if ($message = Session::get('success'))
-        <div style="color: green">{{ $message }}</div>
-    @endif
-    @if ($errors->any())
-        <div style="color: red">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <h2 class="mt-4">Informasi Pemagangan</h2>
+    
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Informasi Pemagangan</h5>
+    
+
+    @if (session()->has('success'))
+        <script>
+            alert('{{ session('success') }}')
+        </script>
     @endif
 
-<ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">Dashboard &raquo; Pemagangan</li>
-</ol>
-   
-<div class="col-xl-12">
-  <div class="card">
-      <div class="card-header bg-white">
-        
-      </div>
       <div class="card-body overflow-auto">
         
          
@@ -507,9 +503,6 @@
 </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
 
 @endsection
 

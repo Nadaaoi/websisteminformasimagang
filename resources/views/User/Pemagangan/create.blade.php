@@ -46,7 +46,7 @@
                         type="text"
                         id="nama"
                         name="nama"
-                        value="{{ Auth::user()->nama }}"
+                        value="{{ Auth::user()->name }}"
                         placeholder="cth: 20183100xx"
                         aria-describedby="basic-icon-default-company2"
                         required/>

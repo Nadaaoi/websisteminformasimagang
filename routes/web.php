@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getdatafakultas/{id}', [DataFakultasController::class, 'getdatafakultas']);
 
     
-    Route::resource('/pemagangan', PemaganganController::class)->except('edit', 'update');
+    Route::resource('/pemagangan', PemaganganController::class)->except('edit', 'update');  
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

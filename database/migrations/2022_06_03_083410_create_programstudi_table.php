@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFakultasTable extends Migration
+class CreateProgramStudiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateFakultasTable extends Migration
      */
     public function up()
     {
-        Schema::create('fakultas', function (Blueprint $table) {
+        Schema::create('program_studis', function (Blueprint $table) {
             $table->id();
-            $table->string('fakultas');
+            $table->string('programstudi');
             // $table->string('slug')->nullable();
-            $table->string('ketua_fakultas')->nullable();
+            $table->string('kajur')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateFakultasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fakultas');
+        Schema::dropIfExists('programstudi');
     }
 }

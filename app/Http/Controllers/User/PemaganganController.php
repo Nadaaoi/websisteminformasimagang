@@ -147,7 +147,7 @@ class pemaganganController extends RoutingController
         $data['user_id'] = Auth::user()->id;
         $data['slug'] = Str::slug(Auth::user()->name .'-' . date('d,h,i,s'));
         pemagangan::create($data);
-        return redirect()->route('index')->with('success', 'Status pemagangan kamu berhasil disimpan, mohon periksa pemberitahuan secara berkala!');
+        return redirect()->route('pemagangan.index')->with('success', 'Status pemagangan kamu berhasil disimpan, mohon periksa pemberitahuan secara berkala!');
     }
 
     //     pemagangan::create($data);
