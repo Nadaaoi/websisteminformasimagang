@@ -39,7 +39,6 @@
                                 <th class="text-center">Email / Username</th>
                                 <th class="text-center">Roles</th>
                                 <th class="text-center">Aksi</th>
-                                <th class="text-center">Ubah Password</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,28 +54,38 @@
                                     @endif
                                     <td>{{ $dp->roles }}</td>
                                     <td>
+
+                                        {{-- <a href="/data-pengguna/show/{{ $dp->id }}"
+                                            class="text-white text-decoration-none">
+                                            <button type="button" class="btn btn-success" title="Lihat Data">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </a> --}}
+                                        
                                         @if ($dp->roles == 'ADMIN' || $dp->roles == 'USER' || $dp->roles == 'PEMBIMBING')
-                                            <a href="/dashboard/data-pengguna/{{ $dp->slug }}/edit"
+                                            <a href="/data-pengguna/edit/{{ $dp->id }}"
                                                 class="text-white text-decoration-none">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning" title="Edit Data ">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
                                             </a>
                                         @else
                                             -
                                         @endif
+
+                                        @if ($dp->roles == 'ADMIN' || $dp->roles == 'USER' || $dp->roles == 'PEMBIMBING')
+                                            <a href="/data-pengguna/update-password/{{ $dp->id }}"
+                                                class="text-white text-decoration-none">
+                                                <button type="button" class="btn btn-danger" title="Ubah Sandi">
+                                                    <i class="bi bi-unlock"></i>
+                                                </button>
+                                            </a>
+                                        @else
+                                            -
+                                        @endif
+                                        
                                     </td>
-                                    @if ($dp->roles == 'PEMBIMBING' || $dp->roles == 'ADMIN')
-                                        <td>
-                                            <button type="button" onclick="ubahPassword(this)" class="btn btn-warning"
-                                                data-slug="{{ $dp->slug }}" data-emailuser="{{ $dp->username }}"
-                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                        </td>
-                                    @else
-                                        <td>-</td>
-                                    @endif
+                                    
                                 </tr>
                                 @php $i++; @endphp
                             @endforeach

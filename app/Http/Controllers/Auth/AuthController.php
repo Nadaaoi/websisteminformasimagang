@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -53,7 +54,7 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/dashboard');
+        return redirect('/');
     }
 
     
@@ -68,15 +69,17 @@ class AuthController extends Controller
             'current_password' => 'required',
             'new_password' => 'required|min:8|confirmed',
         ]);
-
+    
+        $title = 'gantipassword';
         $user = Auth::user();
-
+    
         /** @var \App\Models\User $user **/
         if (Hash::check($request->current_password, $user->getAuthPassword())) {
             $user->password = Hash::make($request->new_password);
             $user->save();
-
-            return redirect()->back()->with('success', 'Password berhasil diubah!');
+    
+            Session::flash('success', 'Password berhasil diubah!');
+            return redirect()->back();
         } else {
             return redirect()->back()->withErrors(['current_password' => 'Password yang dimasukkan salah!']);
         }

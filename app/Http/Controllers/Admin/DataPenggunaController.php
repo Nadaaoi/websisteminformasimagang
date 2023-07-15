@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DataPenggunaRequest;
 // use App\Models\DataPembimbing;
-use App\Models\ProgramStudi;
+use App\Models\programstudi;
 use App\Models\Fakultas;
 use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +24,7 @@ class DataPenggunaController extends RoutingController
     public function index()
     {
         $title = 'Data Pengguna';
-        $programstudi = Programstudi::all();
+        $programstudi = programstudi::all();
         $fakultas = Fakultas::all();
         $fakultas_id = Auth::user()->fakultas_id;
         return view('Admin.Pengguna.index',[
@@ -42,9 +42,9 @@ class DataPenggunaController extends RoutingController
     {
         $title = 'Tambah Pengguna';
         $fakultas = Fakultas::all();
-        // $fakultas_id = Auth::user()->fakultas_id;
-        $programstudi = Programstudi::all();
-        return view('Admin.Pengguna.create', compact('title', 'programstudi', 'fakultas'));
+        $fakultas_id = Auth::user()->fakultas_id;
+        $programstudi = programstudi::all();
+        return view('Admin.Pengguna.create', compact('title', 'programstudi', 'fakultas', 'fakultas_id'));
     }
 
     /**
@@ -57,64 +57,10 @@ class DataPenggunaController extends RoutingController
     {
         // return $request;
         $data = $request->all();
-        // if($request->roles == 'PEMBIMBING' || $request->roles == 'PROGRAMSTUDI'){
-        //     $data['name'] = '-';
-        // } else{
-        //     $data['name'] = $request->name;
-        // }
-        // $usernamestr = strtolower($request->username);
-        // $data['username'] = str_replace(' ', '', $usernamestr);
         $data['slug'] = Str::slug($request->name . date('d,h,i,s'));
         $data['password'] = Hash::make('password');
-        // if($request->roles == 'PEMBIMBING' || $request->roles == 'MAHASISWA'){
-        //     $str = $request->programstudi;
-        //     $u = explode("-",$str);
-    
-        //     // $data['kode_lokasi'] = $u[0];
-        //     // $data['PEMBIMBING_kerja'] = $u[1];
-            
-        //     // if($request->roles == 'PEMBIMIBNG'){
-        //     //     $countUserPEMBIMBING = User::where('roles', 'PEMBIMBING')->where('programstudi',  $u[1] )->where('kode_lokasi', $u[0])->count();
-        //     //     // return $countUserPEMBIMBING;
-        //     //     if($countUserPEMBIMBING > 0){
-        //     //         return redirect()->route('data-pengguna.index')->with('success', 'Akun PEMBIMBING kerja / akun admin sudah dibuat!');
-        //     //     }
-        //     // }
-        //     // if($request->roles == 'ADMIN'){
-        //     //     $countUserAdmin = User::where('roles', 'ADMIN')->where('kode_lokasi', $u[0] )->count();
-        //     //     // return $countUserAdmin;
-        //     //     if($countUserAdmin > 0){
-        //     //         return redirect()->route('data-pengguna.index')->with('success', 'Akun PEMBIMBING kerja / akun admin sudah dibuat!');
-        //     //     }
-
-        //     // }
-
-           
-
-        //     $data['email_verified_at'] = now();
-        //     $data['email'] = null;
-        // }
-
-        // if($request->roles == 'MAHASISWA'){
-        //     $data['is_khusus'] = 1;
-        //     $data['username'] = null;
-        // }
-      
-        // if($request->roles == 'PEMBIMBING' || $request->roles == 'USER' ){
-        //     $data['name'] = ucwords($request->name);
-        //     $data['email_verified_at'] = now();
-        //     $data['username'] = null;
-        //     if($request->roles == 'PEMBIMBING'){
-        //         $str = $request->programstudi;
-        //         $u = explode("-",$str);
-        //     }
-
-
-        // } 
-        // return $data;
-
         User::create($data);
-        return redirect()->route('data-pengguna.index')->with('success', 'Data Berhasil Ditambahkan!');
+        return redirect('data-pengguna')->with('success', 'Data Berhasil Ditambahkan!');
     }
 
     /**
@@ -123,9 +69,11 @@ class DataPenggunaController extends RoutingController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+    $pengguna = User::find($id);
+    $title = 'Data Pengguna';
+    return view('Admin.Pengguna.show', compact('pengguna', 'title'));
     }
 
     /**
@@ -134,14 +82,15 @@ class DataPenggunaController extends RoutingController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
-    {
-        // return $user;
-        $title = 'Data Pengguna';
-        // $PEMBIMBING = DataPEMBIMBING::all();
-        $jurusan = ProgramStudi::all();
-        return view('pages.dashboard.admin.data-pengguna.edit2', compact('user', 'title', 'PEMBIMBING'));
-    }
+    public function edit($id)
+{
+    $pengguna = user::find($id);
+    $fakultas = Fakultas::all();
+    $programstudi = ProgramStudi::all();
+    $title = 'Data Pengguna';
+    return view('Admin.Pengguna.edit', compact('pengguna', 'fakultas', 'programstudi', 'title'));
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -150,165 +99,42 @@ class DataPenggunaController extends RoutingController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
-    {
-        $userLama =  User::where('slug', $slug)->get();
-        
+    public function update(Request $request, $id)
+{
+    $validatedData = $request->validate([
+        'roles' => 'required',
+        'name' => 'required',
+        'no_hp' => 'required',
+        'email' => 'required|email',
+        'fakultas_id' => 'required_if:roles,PEMBIMBING,USER',
+        'programstudi' => 'required_if:roles,USER',
+        'npm' => 'required_if:roles,USER',
+    ]);
 
-        $message = [
-            'required' => 'Wajib Di Isi!',
-            'email.unique' => 'Email sudah ada !',
-            'username.unique' => 'Username sudah ada !'
-        ];
-        if ($request->roles == 'PEMBIMBING' || $request->roles == 'ADMIN') {
-            if($userLama[0]->username !== $request->username){
-                $data = $request->validate([
-                    'username' => 'required|unique:users',
-                    // 'kode_lokasi' => 'required'
-                    
-                ], $message);
-            } else{
-                 $data = $request->all(); 
-            }
-            
-        }
-        if ($request->roles == 'PEMBIMBING') {
-            if($userLama[0]->email !== $request->email){
-                $data = $request->validate([
-                    'email' => 'required|unique:users',
-                    'name' => 'required'
-                    
-                ], $message);
-            }  else{
-                $data = $request->all(); 
-            }
-            
-        }
-        if ($request->roles == 'USER') {
-            if($userLama[0]->email !== $request->email){
-                $data = $request->validate([
-                    'email' => 'required|unique:users',
-                    'name' => 'required'
-                    
-                ], $message);
-            } else {
-                $data = $request->all(); 
-            }
-            
-        }
-        // return $data;
+    $pengguna = user::find($id);
+    $pengguna->roles = $request->roles;
+    $pengguna->name = $request->name;
+    $pengguna->no_hp = $request->no_hp;
+    $pengguna->email = $request->email;
+    $pengguna->fakultas_id = $request->fakultas_id;
+    $pengguna->programstudi = $request->programstudi;
+    $pengguna->npm = $request->npm;
+    $pengguna->save();
 
-        // $data = $request->all();
-        // return $data;
-        // $data = $user->all();
-        // $email = DB::table('users')->where('id', $request->id)->value('id');
+    return redirect()->route('data-pengguna.index')->with('success', 'Data pengguna berhasil diubah!');
+}
 
-        // $data['slug'] = Str::slug($request->name);
-
-        // $data['slug'] = $user->slug;
-        // return $id;
-        // return $data['PEMBIMBING_kerja'];
-       
+    // public function updatePassword(Request $request, $id)
+    // {
+    //     // return $request;
         
-        $user = User::where('slug', $slug);
-        if(isset($request->PEMBIMBING_kerja)){
-            if($request->roles == 'PEMBIMBING'){
-                $str = $request->PEMBIMBING_kerja;
-                $u = explode("-",$str);
+    //     $user = User::where('id', $id);
+    //     $user->update([
+    //         'password' => Hash::make($request->password)
+    //     ]);
         
-                $data['kode_lokasi'] = $u[0];
-                $data['PEMBIMBING_kerja'] = $u[1];
-                if($userLama[0]->PEMBIMBING_kerja !== $data['PEMBIMBING_kerja'] = $u[1]){
-                    $countUserPEMBIMBING = User::where('roles', 'PEMBIMBING')->where('PEMBIMBING_kerja',  $u[1] )->where('kode_lokasi', $u[0])->count();
-                    // return $countUserPEMBIMBING;
-                    if($countUserPEMBIMBING > 0){
-                        return redirect()->route('data-pengguna.index')->with('success', 'Akun PEMBIMBING kerja / akun admin sudah ada');
-                    }
-
-                }
-                
-                $data['name'] = '-';
-                $user->update([
-                    'roles' => $data['roles'],
-                    'name' => $data['name'],
-                    'username' => $data['username'],
-                    
-                    'PEMBIMBING_kerja' => $data['PEMBIMBING_kerja'],
-                    'kode_lokasi' => $data['kode_lokasi']
-                ]);
-                
-            } elseif($request->roles == 'PEMBIMBING'){
-             
-                $data['name'] = $request->name;
-                $str = $request->PEMBIMBING_kerja;
-                $u = explode("-",$str);
-        
-                $data['kode_lokasi'] = $u[0];
-                $data['PEMBIMBING_kerja'] = $u[1];
-                $user->update([
-                    'roles' => $data['roles'],
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'PEMBIMBING_kerja' => $data['PEMBIMBING_kerja'],
-                    'kode_lokasi' => $data['kode_lokasi']
-                ]);
-            } elseif ($request->roles == 'ADMIN'){
-                $str = $request->PEMBIMBING_kerja;
-                $u = explode("-",$str);
-        
-                $data['kode_lokasi'] = $u[0];
-                $data['PEMBIMBING_kerja'] = $u[1];
-                if($userLama[0]->PEMBIMBING_kerja !== $data['PEMBIMBING_kerja'] = $u[1]){
-                    $countUserAdmin = User::where('roles', 'ADMIN')->where('kode_lokasi', $u[0] )->count();
-                    if($countUserAdmin > 0 ){
-                        return redirect()->route('data-pengguna.index')->with('success', 'Akun PEMBIMBING kerja / akun admin sudah dibuat');
-                    }
-
-                }
-              
-                $user->update([
-                    'roles' => $request->roles,
-                    'name' => '-',
-                    'username' => $data['username'],
-                    
-                    'PEMBIMBING_kerja' => $data['PEMBIMBING_kerja'],
-                    'kode_lokasi' => $data['kode_lokasi']
-                ]);
-
-            } else{
-                $data['name'] = '-';
-                $user->update([
-                    'roles' => $data['roles'],
-                    'name' => $data['name'],
-                    'PEMBIMBING_kerja' => $data['PEMBIMBING_kerja'],
-                ]);
-            }
-            
-        }else{
-            $user->update([
-                'roles' => $data['roles'],
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'PEMBIMBING_kerja' => null,
-                'username' => null,
-                'kode_lokasi' => null,
-            ]);
-
-        }
-        
-        return redirect()->route('data-pengguna.index')->with('success', 'Data Berhasil Diubah!');
-    }
-    public function updatePassword(Request $request, $slug)
-    {
-        // return $request;
-        
-        $user = User::where('slug', $slug);
-        $user->update([
-            'password' => Hash::make($request->password)
-        ]);
-        
-        return redirect()->route('data-pengguna.index')->with('success', 'Password Berhasil Diubah!');
-    }
+    //     return redirect()->route('data-pengguna.index')->with('success', 'Password Berhasil Diubah!');
+    // }
 
     /**
      * Remove the specified resource from storage.

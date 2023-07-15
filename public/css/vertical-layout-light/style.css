@@ -10180,7 +10180,7 @@ pre code {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f5f5f5;
+  background-color: #edfff5;
 }
 
 .table-hover tbody tr:hover {
@@ -19699,7 +19699,7 @@ code {
 
 /* Footer */
 .footer {
-  background: #f5f5f5;
+  background: #edfff5;
   padding: 30px 2.45rem;
   transition: all 0.25s ease;
   -moz-transition: all 0.25s ease;
@@ -19994,7 +19994,7 @@ code {
   padding-top: 16px;
   padding-bottom: 16px;
   z-index: 10;
-  background: #f5f5f5;
+  background: #edfff5;
 }
 
 .doc-content {
@@ -28449,7 +28449,7 @@ div.tagsinput span.tag a {
 }
 
 .content-wrapper {
-  background: #f5f5f5;
+  background: #edfff5;
   padding: 2.375rem 2.375rem;
   width: 100%;
   -webkit-flex-grow: 1;

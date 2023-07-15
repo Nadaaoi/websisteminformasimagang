@@ -12,6 +12,6 @@ class DashboardController extends BaseController
     public function index()
     {   
         $title = 'Dashboard';
-        return view('Dashboard', compact('title'));
+        return view('dashboard', compact('title'));
     }
 }

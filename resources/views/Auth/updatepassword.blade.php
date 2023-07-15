@@ -7,11 +7,11 @@
 @endsection
 
 @section('content')
-    @if (session()->has('success'))
-        <script>
-            alert('{{ session('success') }}');
-        </script>
-    @endif
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
     <form method="POST" action="{{ route('update-password') }}">
         @csrf
