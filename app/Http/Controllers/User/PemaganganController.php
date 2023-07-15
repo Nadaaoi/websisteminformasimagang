@@ -21,6 +21,7 @@ use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class pemaganganController extends RoutingController
 {
     /**
@@ -134,15 +135,19 @@ class pemaganganController extends RoutingController
             }
         }
 
-        if($request->file('buktipenerimaan')){
+        if ($request->file('buktipenerimaan')) {
             $data['buktipenerimaan'] = $request->file('buktipenerimaan')->storeAs('public/buktipenerimaan', $nama_path . '-buktipenerimaan');
         }
-        if($request->file('transkrip_nilai')){
+        
+        if ($request->file('transkrip_nilai')) {
             $data['transkrip_nilai'] = $request->file('transkrip_nilai')->storeAs('public/transkrip_nilai', $nama_path . '-transkrip_nilai');
         }
-        if($request->file('kartumahasiswa')){
+        
+        if ($request->file('kartumahasiswa')) {
             $data['kartumahasiswa'] = $request->file('kartumahasiswa')->storeAs('public/kartumahasiswa', $nama_path . '-kartumahasiswa');
         }
+        
+        
         
         $data['user_id'] = Auth::user()->id;
         $data['slug'] = Str::slug(Auth::user()->name .'-' . date('d,h,i,s'));
@@ -264,18 +269,19 @@ class pemaganganController extends RoutingController
         return $id;
     }
 
+
     public function view_buktipenerimaan($id)
-{
-    if(Auth::user()->id != $id){
-        return redirect()->back();
+    {
+        if (Auth::user()->id != $id) {
+            return redirect()->back();
+        }
+    
+        $slug = Pemagangan::where('id', $id)->first();
+        $outputfile = public_path('storage/buktipenerimaan/'. $slug);
+    
+        return response()->file($outputfile);
     }
-        
-    $path = Pemagangan::where('id', $id)->first();
-    $outputfile = url('storage/'.$path->buktipemagangan);
-
-    return response()->file($outputfile);
-}
-
+    
 
     public function view_transkrip_nilai($id)
     {

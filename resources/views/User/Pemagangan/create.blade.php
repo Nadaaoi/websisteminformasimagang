@@ -458,6 +458,7 @@
                       <label for="" id="p_kartumahasiswa" class="text-muted text-danger" style="font-size: smaller">* Bukti kartu mahasiswa kamu harus dalam format PNG/JPG dengan ukuran maksimal 2 MB</label>
                     </div>
                   </div>
+                </div>
                 
 
                   <div class="col-sm-12" id="BelumMagang" style="display: none;">

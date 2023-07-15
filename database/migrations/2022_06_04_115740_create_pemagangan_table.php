@@ -21,7 +21,7 @@ class CreatePemaganganTable extends Migration
             $table->string('npm')->unique();
             $table->date('tanggalpengajuan');
             $table->string('fakultas');
-            $table->string('DataProgramStudi');
+            $table->string('programstudi');
             $table->integer('tahunmasuk');
             $table->string('jenjangpendidikan');
             $table->string('kelas');
