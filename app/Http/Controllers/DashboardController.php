@@ -20,25 +20,29 @@ class DashboardController extends BaseController
     {   
         $title = 'Dashboard';
         $user_id = Auth::user()->id;
+        $year = date('Y');
     
         // Menghitung jumlah logbook berdasarkan user_id yang sedang login
         $pemagangans = Pemagangan::all();
         // $statuspemagangan = Pemagangan::where('statuspenajuan', $statuspengajuan)->get;
-        $logbookCount = Logbook::where('user_id', $user_id)->count();
-        $bimbinganCount = Bimbingan::where('user_id', $user_id)->count();
-        $pemaganganCount = Pemagangan::all()->count();
-        $diterimaCount = User::where('status_akun', 'DITERIMA')->count();
-        $tidakditerimaCount = User::where('status_akun', 'TIDAK DITERIMA')->count();
+        $logbookCount = Logbook::where('user_id', $user_id)->whereYear('created_at', now()->year)->get()->count();
+        $bimbinganCount = Bimbingan::where('user_id', $user_id)->whereYear('created_at', now()->year)->get()->count();
+        $pemaganganCount = Pemagangan::whereYear('created_at', now()->year)->get()->count();
+        $diterimaCount = User::where('status_akun', 'DITERIMA')->whereYear('created_at', now()->year)->get()->count();
+        $tidakditerimaCount = User::where('status_akun', 'TIDAK DITERIMA')->whereYear('created_at', now()->year)->get()->count();
         $MSIBCount = Pemagangan::where('programmagang', 'MSIB')
                      ->where('statuspengajuan', 'DITERIMA')
+                     ->whereYear('created_at', now()->year)->get()
                      ->count();
 
         $MAGENTACount = Pemagangan::where('programmagang', 'MAGENTA')
                     ->where('statuspengajuan', 'DITERIMA')
+                    ->whereYear('created_at', now()->year)->get()
                     ->count();
 
         $MagangregulerCount = Pemagangan::where('programmagang', 'Reguler')
                     ->where('statuspengajuan', 'DITERIMA')
+                    ->whereYear('created_at', now()->year)->get()
                     ->count();
 
         $BelumMagangCount = Pemagangan::where('programmagang', 'Belummagang')
@@ -47,18 +51,20 @@ class DashboardController extends BaseController
                             ->from('pemagangans')
                             ->whereIn('statuspengajuan', ['DITERIMA', 'TIDAK DITERIMA']);
                     })
+                    ->whereYear('created_at', now()->year)->get()
                     ->count();
 
         $terdaftarCount = User::where('roles', 'USER')
                      ->where('status_akun', 'TERDAFTAR')
+                     ->whereYear('created_at', now()->year)->get()
                      ->count();
 
-        $pemaganganaktif = Pemagangan::where('statuspengajuan', 'DITERIMA')->get();
+        $pemaganganaktif = Pemagangan::where('statuspengajuan', 'DITERIMA')->whereYear('created_at', now()->year)->get();
 
         // DD($pemaganganaktif);
                      
-        $mahasiswaCount = User::where('roles', 'USER')->count();
-        $pembimbingCount = User::where('roles', 'PEMBIMBING')->count();
+        $mahasiswaCount = User::where('roles', 'USER')->whereYear('created_at', now()->year)->get()->count();
+        $pembimbingCount = User::where('roles', 'PEMBIMBING')->whereYear('created_at', now()->year)->get()->count();
         $informatikaData = [
             $this->countMahasiswaByStatusAndProdi('DITERIMA', 1),
             $this->countMahasiswaByStatusAndProdi('DITERIMA', 2),
@@ -132,7 +138,7 @@ class DashboardController extends BaseController
         'MSIBCount',
         'MAGENTACount',
         'MagangregulerCount',
-        'BelumMagangCount'));
+        'BelumMagangCount','year'));
     }
 
 
@@ -141,6 +147,7 @@ class DashboardController extends BaseController
     return DB::table('users')
         ->where('status_akun', $status)
         ->where('programstudi', $prodi)
+        ->whereYear('created_at', now()->year)->get()
         ->count();
     }
 }

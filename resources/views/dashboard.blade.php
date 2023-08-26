@@ -35,7 +35,7 @@
     <h2 class="font-weight-bold">Halo, <span class="text-primary">{{ Auth::user()->name }} !</span></h2>
     <h5 class="breadcrumb-item active">
         Selamat datang di website sistem informasi kerja praktik mahasiswa
-        <span class="text-primary">Universitas Bina Insani!</span>
+        <span class="text-primary">Universitas Bina Insani {{ $year }}</span>
     </h5>
     <div class="div-with-margin mb-3">
         <!-- Konten elemen div -->
@@ -55,7 +55,7 @@
                   <div class="ml-xl-4 mt-3">
                   <p class="card-title">Informasi Kerja Praktik</p>
                     <h2 class="text-primary">Universitas</h2>
-                    <h3 class="font-weight-500 mb-xl-4 text-primary">Bina Insani</h3>
+                    <h3 class="font-weight-500 mb-xl-4 text-primary">Bina Insani {{ $year }}</h3>
                     <p class="mb-2 mb-xl-0">Pemagangan yang diberlakukan Universitas Bina Insani yaitu Magang Reguler, MAGENTA (Magang Gerenasi Bertalenta) dan MSIB (Magang Studi Independen Bersertifikat).</p>
                   </div>  
                   </div>
