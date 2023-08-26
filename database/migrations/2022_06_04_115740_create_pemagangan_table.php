@@ -17,8 +17,9 @@ class CreatePemaganganTable extends Migration
             $table->id();
             $table->string('slug');
             $table->bigInteger('user_id');
+            $table->bigInteger('id_pembimbing')->nullable();
             $table->string('nama');
-            $table->string('npm')->unique();
+            $table->string('npm');
             $table->date('tanggalpengajuan');
             $table->string('fakultas');
             $table->string('programstudi');
@@ -28,7 +29,7 @@ class CreatePemaganganTable extends Migration
             $table->float('ipk');
             $table->integer('semester');
             $table->bigInteger('nohp');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->text('programmagang')->nullable();
             $table->string('namaperusahaan')->nullable();
             $table->string('posisi')->nullable();
@@ -36,9 +37,11 @@ class CreatePemaganganTable extends Migration
             $table->date('tanggalselesai')->nullable();
             $table->string('durasimagang')->nullable();
             $table->string('alasanbelummagang')->nullable();
+            $table->string('statuspengajuan')->default('terdaftar')->nullable();
+            $table->string('namapembimbing')->nullable();
             $table->string('buktipenerimaan')->nullable();
-            $table->string('transkrip_nilai');
-            $table->string('kartumahasiswa');
+            $table->string('transkrip_nilai')->nullable();
+            $table->string('kartumahasiswa')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

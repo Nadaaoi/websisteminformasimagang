@@ -1,23 +1,16 @@
 @include('Template.css')
 
 <body>
-  
-    @if(session('success'))
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ session('success') }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-    @endif
     <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper">
+    @include('Template.navbar')
     @include('Template.sidebar')
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="row">
         @yield('container')
         @yield('content')
-        @yield('modal-box')
+    {{-- @include('Template.modal') --}}
       </div>
       </div>
        <footer class="footer">

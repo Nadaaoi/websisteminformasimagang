@@ -24,11 +24,9 @@ class DataPenggunaController extends RoutingController
     public function index()
     {
         $title = 'Data Pengguna';
-        $programstudi = programstudi::all();
-        $fakultas = Fakultas::all();
-        $fakultas_id = Auth::user()->fakultas_id;
+        // $programstudi = programstudi::all();
         return view('Admin.Pengguna.index',[
-            'data_pengguna' => User::all(), 'programstudi' => $programstudi, 'fakultas' => $fakultas, 'fakultas_id' => $fakultas_id,
+            'data_pengguna' => User::all(),
             'title' => $title
         ]);
     }
@@ -40,7 +38,7 @@ class DataPenggunaController extends RoutingController
      */
     public function create()
     {
-        $title = 'Tambah Pengguna';
+        $title = 'Data Pengguna';
         $fakultas = Fakultas::all();
         $fakultas_id = Auth::user()->fakultas_id;
         $programstudi = programstudi::all();
@@ -53,13 +51,22 @@ class DataPenggunaController extends RoutingController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DataPenggunaRequest $request)
+    public function store(Request $request)
     {
-        // return $request;
         $data = $request->all();
         $data['slug'] = Str::slug($request->name . date('d,h,i,s'));
         $data['password'] = Hash::make('password');
+        
+        // Simpan roles terlebih dahulu
+        
+        $request->validate([
+            'npm' => 'sometimes|unique:users,npm,NULL,id,roles,user',
+            'nip' => 'sometimes|unique:users,nip,NULL,id,roles,pembimbing',
+            // tambahkan aturan validasi lainnya sesuai kebutuhan
+        ]);
+        
         User::create($data);
+        
         return redirect('data-pengguna')->with('success', 'Data Berhasil Ditambahkan!');
     }
 
@@ -71,10 +78,13 @@ class DataPenggunaController extends RoutingController
      */
     public function show($id)
     {
-    $pengguna = User::find($id);
-    $title = 'Data Pengguna';
-    return view('Admin.Pengguna.show', compact('pengguna', 'title'));
+        $pengguna = User::find($id);
+        // Cek apakah user memiliki data fakultas yang terkait
+        // dd($pengguna->fakultas);
+        $title = 'Data Pengguna';
+        return view('Admin.Pengguna.show', compact('pengguna', 'title'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -99,42 +109,24 @@ class DataPenggunaController extends RoutingController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-{
-    $validatedData = $request->validate([
-        'roles' => 'required',
-        'name' => 'required',
-        'no_hp' => 'required',
-        'email' => 'required|email',
-        'fakultas_id' => 'required_if:roles,PEMBIMBING,USER',
-        'programstudi' => 'required_if:roles,USER',
-        'npm' => 'required_if:roles,USER',
-    ]);
+    public function update(Request $request, $id) {
 
-    $pengguna = user::find($id);
-    $pengguna->roles = $request->roles;
-    $pengguna->name = $request->name;
-    $pengguna->no_hp = $request->no_hp;
-    $pengguna->email = $request->email;
-    $pengguna->fakultas_id = $request->fakultas_id;
-    $pengguna->programstudi = $request->programstudi;
-    $pengguna->npm = $request->npm;
-    $pengguna->save();
+    }
 
-    return redirect()->route('data-pengguna.index')->with('success', 'Data pengguna berhasil diubah!');
-}
-
-    // public function updatePassword(Request $request, $id)
-    // {
-    //     // return $request;
-        
-    //     $user = User::where('id', $id);
-    //     $user->update([
-    //         'password' => Hash::make($request->password)
-    //     ]);
-        
-    //     return redirect()->route('data-pengguna.index')->with('success', 'Password Berhasil Diubah!');
-    // }
+    public function updatePassword(Request $request, $slug)
+    {
+        $user = User::where('slug', $slug)->firstOrFail();
+    
+        $request->validate([
+            'password' => 'required|min:6', // Pastikan password baru minimal 6 karakter
+        ]);
+    
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+    
+        return redirect()->route('data-pengguna.index')->with('success', 'Password Berhasil Diubah!');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -142,8 +134,18 @@ class DataPenggunaController extends RoutingController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        // Cari data user berdasarkan user_id
+        $user = User::find($id);
+    
+        if ($user) {
+            // Hapus data user jika ditemukan
+            $user->delete();
+            return redirect()->route('data-pengguna.index')->with('success', 'Data Pengguna berhasil dihapus!');
+        } else {
+            // Tampilkan pesan jika data user tidak ditemukan
+            return redirect()->route('data-pengguna.index')->with('error', 'Data Pengguna tidak ditemukan!');
+        }
     }
 }

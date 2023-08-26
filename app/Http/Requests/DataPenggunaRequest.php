@@ -26,6 +26,8 @@ class DataPenggunaRequest extends FormRequest
     {
         return [
             'email' => 'unique:users',
+            'nip' => 'unique:users',
+            'npm' => 'unique:users',
             // 'username' => 'required|unique:users',
             'roles' => 'required',
             // 'name' => 'required',
@@ -39,12 +41,9 @@ class DataPenggunaRequest extends FormRequest
             // 'email.required' => 'Email Wajib Di Isi',
             'roles.required' => 'Role Wajib Di Isi',
             'name.required' => 'Nama Wajib Di Isi',
-            'password.required' => 'Kata Sandi Wajib Di Isi',
-            'email.unique' => 'Email Sudah Ada',
-            'username.unique' => 'Username Sudah Ada',
-            'password.min' => 'Minimal 6 Karakter',
-           
-            
+            'email.unique' => 'Email sudah terdaftar',
+            'nip.unique' => 'NIP sudah terdaftar',
+            'npm.unique' => 'NPM sudah terdaftar',
         ];
     }
 }

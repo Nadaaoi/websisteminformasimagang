@@ -14,21 +14,28 @@
 
 @section('content')
 
-    <h2 class="mt-4">Tambah Data Pengguna</h2>
-    
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Tambah Pengguna</h5>
-    
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 
-    @if (session()->has('success'))
-        <script>
-            alert('{{ session('success') }}')
-        </script>
-    @endif
-    {{-- <div class="row justify-content-center mt-3">
-      <div class="col-xl-11 mt-3">
-        <div class="card">
-          <div class="card-header">
-          </div> --}}
+@if(session('warning'))
+<div class="alert alert-warning">
+    {{ session('warning') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+
+    <h2 class="mt-4">Buat Pengajuan Status Pemagangan</h2>
+    
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Pengajuan Pemagangan &raquo; Buat Pengajuan</h5>
+
           <div class="card-body overflow-auto">
             <form action="{{ route('pemagangan.store') }}" method="POST" enctype="multipart/form-data">
               @csrf
@@ -484,6 +491,8 @@
                           </div>
                         </div>
                     </div>
+
+                    <input value="TERDAFTAR" name="statuspengajuan" id="statuspengajuan" type="hidden">
                   </div>
     
                 <div class="row mt-5 justify-content-end">

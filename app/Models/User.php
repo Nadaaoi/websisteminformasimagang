@@ -53,4 +53,30 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function pemagangans()
+    {
+        return $this->hasMany(Pemagangan::class, 'namapembimbing', 'name');
+        return $this->hasMany(Pemagangan::class, 'user_id');
+    }
+
+    public function fakultas()
+    {
+        return $this->belongsTo(Fakultas::class, 'fakultas_id');
+    }
+
+    public function programstudi()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'programstudi', 'id');
+    }
+    
+    public function getDataUser()
+    {
+        $mahasiswa = DB::table('users')
+        ->join('pemagangans', 'users.id', '=', 'pemagangans.user_id')
+        ->select('pemagangans.nama', 'pemagangans.jurusan','pemagangans.user_id')
+        ->where('status_akun', 'DITERIMA')
+        ->get();
+        return $mahasiswa;
+    }
 }

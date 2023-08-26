@@ -1,61 +1,73 @@
-@extends('pages.dashboard.layouts.main')
+@extends('Template.main')
 
 @section('css')
-   <link rel="stylesheet" href="/css/datatables/bootstrap.min.css">
-   <link rel="stylesheet" href="/css/datatables/buttons.bootstrap5.min.css">
-   <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap5.min.css">
-   <style>
-       .fs-x{
+    <link rel="stylesheet" href="/css/datatables/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/datatables/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap5.min.css">
+    <style>
+        .fs-x {
             font-size: smaller;
             padding: 2px 12px;
         }
-   </style>
-
+    </style>
 @endsection
 
 @section('content')
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 
-<div class="container-fluid px-4">    
-  <h1 class="mt-4">Pemberitahuan</h1>
-  <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard &raquo; Pemberitahuan</li>
-  </ol>
-  
+@if(session('warning'))
+<div class="alert alert-warning">
+    {{ session('warning') }}
+</div>
+@endif
 
-  <div class="row justify-content-center mt-5 ">
-      <div class="col-xl-12">
-          <div class="card">
-              <div class="card-header ">
-             
-              </div>
-              <div class="card-body overflow-auto">
-              <table id="example" class="table table-striped" style="width:100%">
-                      <thead>
-                          <tr>
-                            
-                              <th>No</th>
-                              <th>Waktu</th>
-                              <th>Pemberitahuan</th>
-                              {{-- <th>Action</th> --}}
-                          </tr>
-                      </thead>
-                      <tbody><?php $i=1; ?>
-                        @foreach ($pemberitahuan as $p)
-                            
-                        <tr>
-                            <td>{{ $i; }}</td>
-                            <td>{{ $p->created_at }}</td>
-                            {{-- <td>{{ $p->pemberitahuan }}</td> --}}
-                            <td>{!! $p->pemberitahuan !!}</td>
-                            
-                        </tr>
-                        <?php $i++ ?>
-                        @endforeach
-                      </tbody>
-                  </table>
-              </div>
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mt-4">Pemberitahuan</h2>
+                <h5 class="breadcrumb-item active">Dashboard &raquo; Pemberitahuan</h5>
             </div>
-          
+
+            <div class="card-body overflow-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="example" class="display expandable-table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Waktu</th>
+                                    <th>Pemberitahuan</th>
+                                    {{-- <th>Action</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i=1; ?>
+                                @foreach ($pemberitahuan as $p)
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($p->created_at)->format('d-m-Y') }}</td>
+                                        {{-- <td>{{ $p->pemberitahuan }}</td> --}}
+                                        <td>{!! $p->pemberitahuan !!}</td>
+                                    </tr>
+                                    <?php $i++ ?>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

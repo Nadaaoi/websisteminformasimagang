@@ -22,15 +22,13 @@ class PemberitahuanController extends RoutingController
     {
         $Pemagangans = Pemagangan::where('user_id', Auth::user()->id)->count();
         if($Pemagangans == 0){
-            return redirect()->route('data-pribadi.index')->with('success', 'Mohon dilengkapi terlebih dahulu sebelum melanjutkan!');
+            return redirect()->route('pemagangan.index')->with('success', 'Mohon dilengkapi terlebih dahulu sebelum melanjutkan!');
         }
-        // if($dokumenC == 0){
-        //     return redirect()->route('dokumen.index')->with('success', 'Mohon dilengkapi terlebih dahulu sebelum melanjutkan!');
-        // }
+
         $pemberitahuan = Pemberitahuan::latest()->where('user_id', Auth::user()->id)->get();
         $title = 'Pemberitahuan';
         // return $pemberitahuan;
-        return view('pages.dashboard.user.pemberitahuan.index', compact('pemberitahuan', 'title'));
+        return view('user.pemberitahuan.index', compact('pemberitahuan', 'title'));
     }
 
     /**

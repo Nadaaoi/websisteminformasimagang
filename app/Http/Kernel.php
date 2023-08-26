@@ -2,6 +2,12 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\IsUnit;
+use App\Http\Middleware\IsUser;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsPEMBIMBING;
+use App\Http\Middleware\IsDiterima;
+use App\Http\Middleware\IsSuperAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -16,7 +22,7 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
-        \Illuminate\Http\Middleware\HandleCors::class,
+        // \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
@@ -33,6 +39,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -55,19 +62,20 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed' => \App\Http\Middleware\ValidateSignature::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'admin' => IsAdmin::class,
-        'user' => IsUser::class,
-        'unit' => IsUnit::class,
-        'diterima' => IsDiterima::class,
-        'PEMBIMBING' => IsPEMBIMBING::class,
-        'super_admin' => IsSuperAdmin::class,
+        'ADMIN' => \App\Http\Middleware\IsAdmin::class,
+        'user' => \App\Http\Middleware\IsUser::class,
+        'unit' => \App\Http\Middleware\IsUnit::class,
+        'diterima' => \App\Http\Middleware\IsDiterima::class,
+        'PEMBIMBING' => \App\Http\Middleware\IsPEMBIMBING::class,
+        'super_admin' => \App\Http\Middleware\IsSuperAdmin::class,
+        'checkPemaganganDates' => \App\Http\Middleware\CheckPemaganganDates::class,
+        'CheckStatusAkun' => \App\Http\Middleware\CheckStatusAkun::class,
     ];
 }

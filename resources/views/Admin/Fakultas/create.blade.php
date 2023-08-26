@@ -13,17 +13,27 @@
 @endsection
 
 @section('content')
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if(session('warning'))
+<div class="alert alert-warning">
+    {{ session('warning') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 
     <h2 class="mt-4">Data Fakultas</h2>
     
     <h5 class="breadcrumb-item active">Dashboard &raquo; Tambah Fakultas</h5>
-    
-
-    @if (session()->has('success'))
-        <script>
-            alert('{{ session('success') }}')
-        </script>
-    @endif
 
     <div class="card-body overflow-auto">
         <form class="forms-sample" method="POST" action="{{ route('data-fakultas.store') }}">

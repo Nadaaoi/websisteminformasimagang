@@ -21,7 +21,6 @@ use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
 class pemaganganController extends RoutingController
 {
     /**
@@ -29,21 +28,26 @@ class pemaganganController extends RoutingController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(){
+        // $Pemagangans = Pemagangan::where('user_id', Auth::user()->id)->count();
+        // if($Pemagangans == 0){
+        //     return redirect()->route('pemagangan.create')->with('success', 'Mohon dilengkapi terlebih dahulu sebelum melanjutkan!');
+        // }
+        
+        
+        $pemagangans = Pemagangan::where('user_id', Auth::user()->id)->get();
+        $title = 'Pemagangan';
+        return view('user.pemagangan.index', compact('pemagangans', 'title'));
+    }
+    public function show()
     {
-        // return
         $id = Auth::user()->id;
         $pemagangan = Pemagangan::where('user_id', $id)->get();
         $pemagangan_count = pemagangan::where('user_id', $id)->count();
-        // return $pemagangan;
+        
         $data_user = User::where('id', $id)->get();
-        // return $data_user;
-        // return $id;
         if($pemagangan_count == 0){
             $jurusan = ProgramStudi::all();
-            // $kebutuhanMagang = KebutuhanMagang::where('hasil_kebutuhan', null)->where('status_kebutuhan', 'DISETUJUI')->get();
-            // return $kebutuhanMagang;
-            
 
             return view('user.pemagangan.create',[
                 'us' => $data_user,
@@ -52,9 +56,8 @@ class pemaganganController extends RoutingController
             ]);
         } else{
            
-            // return $data;
 
-            return view('user.pemagangan.index',[
+            return view('user.pemagangan.show',[
              
                 'us' => $pemagangan,
                 'title' => 'Pemagangan',
@@ -71,7 +74,7 @@ class pemaganganController extends RoutingController
     public function create()
     {
         $title = 'Pemagangan';
-        return view('pages.dashboard.user.pemagangan.create',compact('title'));
+        return view('user.pemagangan.create',compact('title'));
     }
 
     /**
@@ -90,7 +93,7 @@ class pemaganganController extends RoutingController
             'max' => 'Maksimal ukuran file 5 MB',
             'required' => 'Wajib Diisi',
             'npm.min' => 'NPM harus 10 angka',
-            'npm.unique' => 'NPM sudah terdaftar',
+            // 'npm.unique' => 'NPM sudah terdaftar',
             'npm.max' => 'NPM Maximal 9 angka',
             'semester.min' => 'Minimal semester 5 untuk D3 dan semester 7 untuk S1',
             'ipk.min' => 'Minimal IPK 2.00',
@@ -135,19 +138,15 @@ class pemaganganController extends RoutingController
             }
         }
 
-        if ($request->file('buktipenerimaan')) {
+        if($request->file('buktipenerimaan')){
             $data['buktipenerimaan'] = $request->file('buktipenerimaan')->storeAs('public/buktipenerimaan', $nama_path . '-buktipenerimaan');
         }
-        
-        if ($request->file('transkrip_nilai')) {
+        if($request->file('transkrip_nilai')){
             $data['transkrip_nilai'] = $request->file('transkrip_nilai')->storeAs('public/transkrip_nilai', $nama_path . '-transkrip_nilai');
         }
-        
-        if ($request->file('kartumahasiswa')) {
+        if($request->file('kartumahasiswa')){
             $data['kartumahasiswa'] = $request->file('kartumahasiswa')->storeAs('public/kartumahasiswa', $nama_path . '-kartumahasiswa');
         }
-        
-        
         
         $data['user_id'] = Auth::user()->id;
         $data['slug'] = Str::slug(Auth::user()->name .'-' . date('d,h,i,s'));
@@ -167,10 +166,6 @@ class pemaganganController extends RoutingController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -205,7 +200,6 @@ class pemaganganController extends RoutingController
             'max' => 'Maksimal ukuran file 5 MB',
             'required' => 'Wajib Diisi',
             'npm.min' => 'NPM harus 10 angka',
-            'npm.unique' => 'NPM sudah terdaftar',
             'npm.max' => 'NPM Maximal 9 angka',
             'semester.min' => 'Minimal semester 5 untuk D3 dan semester 7 untuk S1',
             'ipk.min' => 'Minimal IPK 2.00',
@@ -236,11 +230,7 @@ class pemaganganController extends RoutingController
         // return $rules;
         // return $pemagangan;
         // $data = $request->all();
-        if($request->npm != $pemagangan->npm){
-            $rules['npm'] =  'required|unique|max:10|min:10';
-            // die;
-        };
-        $validatedData = $request->validate($rules, $message);
+
         // $validatedData = $request->validate($rules);
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['ipk'] = $request->ipk;
@@ -269,19 +259,18 @@ class pemaganganController extends RoutingController
         return $id;
     }
 
-
     public function view_buktipenerimaan($id)
-    {
-        if (Auth::user()->id != $id) {
-            return redirect()->back();
-        }
-    
-        $slug = Pemagangan::where('id', $id)->first();
-        $outputfile = public_path('storage/buktipenerimaan/'. $slug);
-    
-        return response()->file($outputfile);
+{
+    if(Auth::user()->id != $id){
+        return redirect()->back();
     }
-    
+        
+    $path = Pemagangan::where('id', $id)->first();
+    $outputfile = url('storage/'.$path->buktipemagangan);
+
+    return response()->file($outputfile);
+}
+
 
     public function view_transkrip_nilai($id)
     {

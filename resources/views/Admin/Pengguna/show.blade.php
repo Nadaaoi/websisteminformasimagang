@@ -14,16 +14,27 @@
 
 @section('content')
 
-    <h2 class="mt-4">Edit Data Pengguna</h2>
-    
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Edit Pengguna</h5>
-    
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 
-    @if (session()->has('success'))
-        <script>
-            alert('{{ session('success') }}')
-        </script>
-    @endif
+@if(session('warning'))
+<div class="alert alert-warning">
+    {{ session('warning') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+
+    <h2 class="mt-4">Lihat Data Pengguna</h2>
+    
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Pengguna &raquo; {{ $pengguna->name }}</h5>
 
     <div class="card-body overflow-auto">
         <form class="forms-sample" method="POST" action="{{ url('data-pengguna/update', $pengguna->id) }}">
@@ -71,8 +82,12 @@
                         </div>
                         <label for="inputPassword" class="mb-3 col-sm-2 col-form-label fakultas">Fakultas</label>
                         <div class="col-sm-4 fakultas_id">
-                            <input readonly required type="fakultas_id" class="mb-3 form-control @error('fakultas_id') is-invalid @enderror" value="{{ $pengguna->fakultas_id }}" name="fakultas_id" autocomplete="fakultas_id">
-                            @error('fakultas_id')
+                            <input readonly required type="text" class="mb-3 form-control @error('fakultas_id') is-invalid @enderror" value="{{ $pengguna->fakultas ? $pengguna->fakultas->nama : '-' }}" name="fakultas_id" autocomplete="off">
+
+                            @php
+                                dd($pengguna);
+                            @endphp
+                                                        @error('fakultas_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
