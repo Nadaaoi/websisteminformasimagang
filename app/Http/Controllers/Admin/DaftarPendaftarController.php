@@ -26,6 +26,7 @@ class DaftarPendaftarController extends ControllerResolver
             ->join('users', 'pemagangans.user_id', '=', 'users.id')
             ->select('users.*', 'pemagangans.*')
             // ->where('roles', 'USER')->where('status_akun', '!=', 'DITERIMA')
+            ->orderByDesc('pemagangans.created_at')
             ->get();
 
             // return $us;

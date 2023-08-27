@@ -23,16 +23,34 @@
 </div>
 @endif
 
+<style>
+    .form-control-sm { width: 10%; }
+    .btn-sm { width: 10%; }"
+</style>
+
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h2 class="mt-4">Peserta Magang</h2>
+                <h2 class="mt-4">Peserta Magang {{ $selectedYear }}</h2>
                 <h5 class="breadcrumb-item active">Dashboard &raquo; Peserta Magang</h5>
             </div>
 
             <div class="card-body overflow-auto">
                 <div class="row">
+                    <div class="row">
+                        <div class="col-12">
+                            <form action="{{ route('pesertamagang.index') }}" method="GET">
+                                <label for="year"><b>Tahun</b></label>
+                                <select class="form-control form-control-sm" name="year" id="year">
+                                    @for ($i = date('Y'); $i >= 2018; $i--)
+                                        <option value="{{ $i }}" {{ $selectedYear == $i ? 'selected' : '' }} class="text-center">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary mt-2 rounded-3">Filter</button>
+                            </form>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <table id="example" class="display expandable-table" style="width:100%">
                             <thead>
