@@ -9,6 +9,7 @@
             font-size: smaller;
             padding: 2px 12px;
         }
+        
     </style>
 @endsection
 
@@ -41,7 +42,25 @@
 
             <div class="card-body overflow-auto">
                 <div class="row">
+                    <div class="row">
+                        <div class="col-12">
+                            <form action="{{ route('daftar-pendaftar.index') }}" method="GET" class="d-flex flex-column ">
+                                <div class="form-group mb-2">
+                                    <label for="year"><b>Tahun</b></label>
+                                    <select class="form-control form-control-sm" name="year" id="year" style="width: 10%;">
+                                        @for ($i = date('Y'); $i >= 2018; $i--)
+                                            <option value="{{ $i }}" {{ $selectedYear == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <button type="submit" class="btn btn-sm btn-primary rounded-3" style="width: 10%;">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>                    
                     <div class="col-12">
+                        
                         <table id="example" class="display expandable-table" style="width:100%">
                             <thead>
                                 <tr>
@@ -138,7 +157,7 @@
 <script src="/js/datatables/buttons.html5.min.js"></script>
 <script src="/js/datatables/buttons.colVis.min.js"></script>
 <script src="/js/datatables/buttons.print.min.js"></script>
-
+<script src="/js/data-table.js"></script>
 <script>
 
 $(document).ready(function() {
@@ -181,4 +200,14 @@ $('.fs-b').click(function (){
 
 })
 </script>
+<style>
+    @media (min-width: 576px) { /* Destop mode */
+        #year {
+            width: 80%;
+        }
+        .btn-sm {
+            width: 80%;
+        }
+    }
+</style>
 @endsection

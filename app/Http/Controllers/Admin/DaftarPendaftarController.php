@@ -17,26 +17,26 @@ class DaftarPendaftarController extends ControllerResolver
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        // $now = Date('Y-m-d');
-        if(Auth::user() && Auth::user()->roles == 'ADMIN' ){
+        if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+            $selectedYear = $request->input('year', date('Y'));
+            
             $us = DB::table('pemagangans')
-            ->join('users', 'pemagangans.user_id', '=', 'users.id')
-            ->select('users.*', 'pemagangans.*')
-            // ->where('roles', 'USER')->where('status_akun', '!=', 'DITERIMA')
-            ->orderByDesc('pemagangans.created_at')
-            ->get();
-
-            // return $us;
+                ->join('users', 'pemagangans.user_id', '=', 'users.id')
+                ->select('users.*', 'pemagangans.*')
+                ->whereYear('pemagangans.created_at', $selectedYear)
+                ->orderByDesc('pemagangans.created_at')
+                ->get();
 
             return view('admin.daftar-pendaftar.index', [
                 'us' => $us,
-                'title' => 'Data Calon Magang'
+                'title' => 'Data Calon Magang',
+                'selectedYear' => $selectedYear
             ]);
         }
     }
+
 
     /**
      * Show the form for creating a new resource.

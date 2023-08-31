@@ -24,8 +24,23 @@
 @endif
 
 <style>
-    .form-control-sm { width: 10%; }
-    .btn-sm { width: 10%; }"
+    .form-control-sm {
+        width: 10%; /* Ukuran normal untuk tampilan desktop */
+    }
+
+    .btn-sm {
+        width: 10%; /* Ukuran normal untuk tampilan desktop */
+    }
+
+    @media (max-width: 576px) { /* Atur ukuran untuk tampilan dengan lebar maksimum 576px (ukuran layar kecil seperti smartphone) */
+        .form-control-sm {
+            width: 50%; /* Ukuran yang lebih besar untuk tampilan mobile */
+        }
+
+        .btn-sm {
+            width: 50%; /* Ukuran yang lebih besar untuk tampilan mobile */
+        }
+    }
 </style>
 
 <div class="row">
