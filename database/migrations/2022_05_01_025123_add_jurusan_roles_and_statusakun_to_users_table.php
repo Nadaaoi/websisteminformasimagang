@@ -16,6 +16,7 @@ class AddJurusanRolesAndStatusakunToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('roles')->after('email')->default('USER');
             $table->string('npm')->after('name')->nullable();
+            $table->boolean('iskaprodi')->after('name')->default(0)->nullable();
             $table->string('nip')->after('npm')->nullable();
             $table->string('programstudi')->after('name')->nullable();
             $table->string('status_akun')->after('roles')->default('TERDAFTAR');

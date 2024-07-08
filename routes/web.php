@@ -16,6 +16,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanBimbinganController;
 use App\Http\Controllers\LaporanLogbookController;
 use App\Http\Controllers\laporanLpController;
+use App\Http\Controllers\Pembimbing\DaftarPendaftarPembimbingController;
 use App\Http\Controllers\Pembimbing\LaporanBimbinganPembimbingController;
 use App\Http\Controllers\Pembimbing\LaporanLogbookPembimbingController;
 use App\Http\Controllers\Pembimbing\laporanLpPembimbingController;
@@ -61,6 +62,20 @@ use App\Http\Middleware\AuthMiddleware;
     Route::resource('/data-fakultas', DataFakultasController::class);
     Route::get('/getdatafakultas/{id}', [DataFakultasController::class, 'getdatafakultas']);
 
+    Route::resource('/daftar-pendaftar', DaftarPendaftarController::class)->except(['show', 'edit', 'update']);
+    Route::get('/daftar-pendaftar/show/{pemagangan:slug}', [DaftarPendaftarController::class, 'show']); /**finish */
+    Route::get('/daftar-pendaftar/edit/{pemagangan:slug}', [DaftarPendaftarController::class, 'edit']);
+    Route::put('/daftar-pendaftar/update/{pemagangan:id}', [DaftarPendaftarController::class, 'update'])->name('daftar-pendaftar.update');
+    Route::get('/daftar-pendaftar/showbelummagang/{pemagangan:slug}', [DaftarPendaftarController::class, 'showbelummagang']);
+    // Route::get('/daftar-pendaftar/showmagang/{pemagangan:slug}', [DaftarPendaftarController::class, 'showmmagang']);
+
+    Route::resource('/daftar-pendaftar-pembimbing', DaftarPendaftarPembimbingController::class)->except(['show', 'edit', 'update']);
+    Route::get('/daftar-pendaftar-pembimbing/show/{pemagangan:slug}', [DaftarPendaftarPembimbingController::class, 'show']); /**finish */
+    Route::get('/daftar-pendaftar-pembimbing/edit/{pemagangan:slug}', [DaftarPendaftarPembimbingController::class, 'edit']);
+    Route::put('/daftar-pendaftar-pembimbing/update/{pemagangan:id}', [DaftarPendaftarPembimbingController::class, 'update'])->name('daftar-pendaftar-pembimbing.update');
+    Route::get('/daftar-pendaftar-pembimbing/showbelummagang/{pemagangan:slug}', [DaftarPendaftarPembimbingController::class, 'showbelummagang']);
+    // Route::get('/daftar-pendaftar/showmagang/{pemagangan:slug}', [DaftarPendaftarController::class, 'showmmagang']);
+
 
     ///////////////////////////////
     // ADMIN
@@ -73,13 +88,10 @@ use App\Http\Middleware\AuthMiddleware;
         Route::post('/data-pengguna-admin/update/{user:id}', [DataPenggunaAdminController::class, 'update']);
         Route::get('/data-pengguna-admin/show/{user:id}', [DataPenggunaAdminController::class, 'show']); 
         Route::put('/data-pengguna-admin/update-password/{user:slug}', [DataPenggunaAdminController::class, 'updatePassword']);
-    
-        Route::resource('/daftar-pendaftar', DaftarPendaftarController::class)->except(['show', 'edit', 'update']);
-        Route::get('/daftar-pendaftar/show/{pemagangan:slug}', [DaftarPendaftarController::class, 'show']); /**finish */
-        Route::get('/daftar-pendaftar/edit/{pemagangan:slug}', [DaftarPendaftarController::class, 'edit']);
-        Route::put('/daftar-pendaftar/update/{pemagangan:id}', [DaftarPendaftarController::class, 'update'])->name('daftar-pendaftar.update');
-        Route::get('/daftar-pendaftar/showbelummagang/{pemagangan:slug}', [DaftarPendaftarController::class, 'showbelummagang']);
-        // Route::get('/daftar-pendaftar/showmagang/{pemagangan:slug}', [DaftarPendaftarController::class, 'showmmagang']);
+        Route::post('/konfirmasi-kaprodi/{userId}', [DataPenggunaController::class, 'konfirmasiKaprodi'])->name('konfirmasi-kaprodi');
+        Route::post('/konfirmasi-hapus-kaprodi/{userId}', [DataPenggunaController::class, 'konfirmasihapusKaprodi'])->name('konfirmasi-hapus-kaprodi');
+        Route::post('/konfirmasi-kaprodi-admin/{userId}', [DataPenggunaAdminController::class, 'konfirmasiKaprodi'])->name('konfirmasi-kaprodi-admin');
+        Route::post('/konfirmasi-hapus-kaprodi-admin/{userId}', [DataPenggunaAdminController::class, 'konfirmasihapusKaprodi'])->name('konfirmasi-hapus-kaprodi-admin');
 
 
     ///////////////////////////////////////////////

@@ -37,7 +37,7 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="mt-4">Pengajuan Status Pemagangan</h2>
-                <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Pengajuan Pemagangan</h5>
+                <h5 class="breadcrumb-item active">Dashboard &raquo; Pengajuan Status Pemagangan</h5>
             </div>
             
             <div class="card-body overflow-auto">

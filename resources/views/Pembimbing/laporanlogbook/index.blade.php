@@ -27,8 +27,8 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h2 class="mt-4">Laporan Kegiatan</h2>
-                <h5 class="breadcrumb-item active">Dashboard &raquo; Laporan Kegiatan</h5>
+                <h2 class="mt-4">Pengisian Log Book Mahasiswa</h2>
+                <h5 class="breadcrumb-item active">Dashboard &raquo; Pengisian Log Book Mahasiswa</h5>
             </div>
 
             <div class="card-body overflow-auto">

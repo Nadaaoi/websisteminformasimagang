@@ -32,9 +32,9 @@
 </div>
 @endif
 
-    <h2 class="mt-4">Data Program Studi</h2>
+    <h2 class="mt-4">Tambah Data Program Studi</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Tambah Program Studi</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Manajemen Program Studi &raquo; Tambah Data Program Studi</h5>
 
     <div class="card-body overflow-auto">
         <form class="forms-sample" method="POST" action="{{ route('data-programstudi.store') }}">

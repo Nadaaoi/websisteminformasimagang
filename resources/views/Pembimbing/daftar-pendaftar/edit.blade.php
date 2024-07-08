@@ -473,36 +473,21 @@
             
             
                               <div class="mb-3 row justify-content-center">
-                                <form action="{{ route('daftar-pendaftar.update', ['pemagangan' => $user[0]->id]) }}" method="POST">
+                                <form action="{{ route('daftar-pendaftar-pembimbing.update', ['pemagangan' => $user[0]->id]) }}" method="POST">
                                   @csrf
                                   @method('PUT')
-                                @if (Auth::user()->roles == 'ADMIN')
-                                  @if ($user[0]->status_akun == 'TERDAFTAR')
+                                @if (Auth::user()->roles == 'PEMBIMBING')
+                                  @if ($user[0]->status_akun == 'DITERIMA')
                                   @endif
                                 @endif
                                     
                                 <div class="col-sm">
                                       <div class="row">
-                                        @if ($user[0]->status_akun == 'TERDAFTAR'||'TIDAK DITERIMA')
-                                          <label for="inputPassword" class="col-sm-2 col-form-label">Status Pendaftar</label>
-                                          <div class="col-sm-4">
-                                              <select id="select-status" name="status_pendaftar" class="form-control @error('status_pendaftar') is-invalid @enderror" aria-label="Default select example">
-                                                <option <?= ( $user[0]->status_akun == 'TERDAFTAR') ? 'selected' : '' ?> value="TERDAFTAR">TERDAFTAR</option>
-                                                <option <?= ( $user[0]->status_akun == 'DITERIMA') ? 'selected' : '' ?> value="DITERIMA">DITERIMA</option>
-                                                <option <?= ( $user[0]->status_akun == 'TIDAK DITERIMA') ? 'selected' : '' ?> value="TIDAK DITERIMA">TIDAK DITERIMA</option>
+                                        @if ($user[0]->status_akun == 'DITERIMA')
 
-                                              </select> 
-                                          </div>
-
-                                            <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label ">Pemberitahuan</label>
-                                            <div class="col-sm-4">
-                                                  <textarea id="pemberitahuan" required class="bg-white form-control mb-2 @error('pemberitahuan') is-invalid @enderror" rows="3" name="pemberitahuan"></textarea>
-                                            </div>
-
-                                        
-                                        {{-- <label for="namapembimbing" id="labelnamapembimbing" name="labelnamapembimbing" style="display: none" class="col-sm-2 col-form-label">Nama Pembimbing</label>
+                                        <label for="namapembimbing" id="labelnamapembimbing" name="labelnamapembimbing" class="col-sm-2 col-form-label">Nama Pembimbing</label>
                                         <div class="col-sm-4">
-                                          <select style="display: none" id="namapembimbing" name="namapembimbing" class="form-control @error('namapembimbing') is-invalid @enderror" aria-label="Default select example">
+                                          <select id="namapembimbing" name="namapembimbing" class="form-control @error('namapembimbing') is-invalid @enderror" aria-label="Default select example">
                                               <option value="">Pilih Pembimbing</option>
                                               @if ($pembimbingRole)
                                                   @foreach($pembimbingRole as $pembimbing)
@@ -515,8 +500,7 @@
                                           @enderror
                                       
                                           <!-- Hidden input untuk menyimpan namapembimbing yang dipilih -->
-                                          <input type="hidden" id="namapembimbing_selected" name="namapembimbing_selected"> --}}
-
+                                          <input type="hidden" id="namapembimbing_selected" name="namapembimbing_selected">
                                           <input type="hidden" value="{{ $data->slug }}" name="slug" id="slug">
                                       </div>
                                         @endif
@@ -527,7 +511,7 @@
                                   
                                   <div class="row mt-3 justify-content-end">
                                     <div class="col-sm-5 text-end">
-                                      @if (Auth::user()->roles == 'ADMIN')
+                                      @if (Auth::user()->roles == 'PEMBIMBING')
                                         @if ($user[0]->status_akun == 'TERDAFTAR'||'TIDAK DITERIMA')
                                           <button type="submit" class="btn btn-primary">Simpan</button>
                                         @endif
@@ -575,7 +559,7 @@
               })
             </script>
 
-<script>
+{{-- <script>
   
 const status_akun = document.getElementById('select-status');
 const namapembimbing = document.getElementById('namapembimbing');
@@ -599,7 +583,15 @@ const labelamapembimbing = document.getElementById('labelnamapembimbing');
     }
   });
   
-  </script>
+  </script> --}}
+
+{{-- <script>
+  document.getElementById('namapembimbing').addEventListener('change', function() {
+      var selectedOption = this.options[this.selectedIndex];
+      var namapembimbingInput = document.getElementById('namapembimbing_selected');
+      namapembimbingInput.value = selectedOption.value;
+  });
+</script> --}}
 
 <script>
   document.getElementById('namapembimbing').addEventListener('change', function() {

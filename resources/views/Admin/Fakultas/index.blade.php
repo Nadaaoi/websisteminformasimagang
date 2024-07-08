@@ -31,9 +31,9 @@
 </div>
 @endif
 
-    <h2 class="mt-4">Data Fakultas</h2>
+    <h2 class="mt-4">Manajemen Fakultas</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Fakultas</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Manajemen Fakultas</h5>
 
 <div class="card-body overflow-auto">
     <div class="row mt-2">

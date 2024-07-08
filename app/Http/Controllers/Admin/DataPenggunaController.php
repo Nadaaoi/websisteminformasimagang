@@ -148,4 +148,48 @@ class DataPenggunaController extends RoutingController
             return redirect()->route('data-pengguna.index')->with('error', 'Data Pengguna tidak ditemukan!');
         }
     }
+
+    public function konfirmasiKaprodi(Request $request, $userId) {
+        // Validasi dan otorisasi sesuai kebutuhan Anda
+        
+        try {
+            $user = User::find($userId);
+            
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User tidak ditemukan.']);
+            }
+    
+            // Perbarui kolom 'iskaprodi' menjadi 1
+            $user->update(['iskaprodi' => 1]);
+    
+            return redirect('data-pengguna')->with('success', 'User berhasil dikonfirmasi sebagai KAPRODI.');
+
+            // return response()->json(['success' => true, 'message' => 'User berhasil dikonfirmasi sebagai KAPRODI.']);
+        } catch (\Exception $e) {
+            return redirect('data-pengguna')->with('error', 'Terjadi kesalahan saat mengkonfirmasi.');
+            // return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat mengkonfirmasi.']);
+        }
+}
+
+public function konfirmasihapusKaprodi(Request $request, $userId) {
+    // Validasi dan otorisasi sesuai kebutuhan Anda
+    
+    try {
+        $user = User::find($userId);
+        
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'User tidak ditemukan.']);
+        }
+
+        // Perbarui kolom 'iskaprodi' menjadi 1
+        $user->update(['iskaprodi' => 0]);
+
+        return redirect('data-pengguna')->with('success', 'User berhasil dihapus dari akses KAPRODI.');
+
+        // return response()->json(['success' => true, 'message' => 'User berhasil dikonfirmasi sebagai KAPRODI.']);
+    } catch (\Exception $e) {
+        return redirect('data-pengguna')->with('error', 'Terjadi kesalahan saat mengkonfirmasi.');
+        // return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat mengkonfirmasi.']);
+    }
+}
 }

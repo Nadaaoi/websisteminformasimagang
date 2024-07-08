@@ -34,8 +34,8 @@
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="mt-4">Data Pengguna</h2>
-                                <h5 class="breadcrumb-item active">Dashboard &raquo; Data Pengguna</h5>
+                                <h2 class="mt-4">Manajemen Pengguna</h2>
+                                <h5 class="breadcrumb-item active">Dashboard &raquo; Manajemen Pengguna</h5>
                             </div>
                 
                             <div class="card-body overflow-auto">
@@ -69,7 +69,7 @@
                                                         <td>{{ $dp->email }}</td>
                                                     @endif
                                                     <td>{{ $dp->roles }}</td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             @if ($dp->roles == 'USER' || $dp->roles == 'PEMBIMBING')
                                                                 
                                                                 <form style="display: inline-block;" action="{{ route('hapus.pengguna', ['user' => $dp->id]) }}" method="post">
@@ -86,9 +86,70 @@
                                                             @else
                                                               Tidak punya akses
                                                             @endif
+
+                                                            @if ($dp->roles == 'PEMBIMBING')
+                                                                
+                                                            @if ($dp->iskaprodi == '0')
+                                                            <button type="button" class="btn btn-success" title="Konfirmasi Kaprodi" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiKaprodi{{ $dp->id }}">
+                                                                <i class="bi bi-check"></i>
+                                                            </button>
+
+                                                            @else
+                                                            <button type="button" class="btn btn-danger" title="Hapus Akses Kaprodi" data-bs-toggle="modal" data-bs-target="#modalHapusAksesKaprodi{{ $dp->id }}">
+                                                                <i class="bi bi-x-circle"></i>
+                                                            </button>
+                                                            @endif
+
+                                                            @else
+                                                            
+                                                            @endif
                                                         </td>                                        
                                                     </tr>
                                                     @php $i++; @endphp
+
+                                                     <!-- Modal untuk konfirmasi "is not kaprodi" -->
+                                                     <div class="modal fade" id="modalHapusAksesKaprodi{{ $dp->id }}" tabindex="-1" aria-labelledby="modalHapusAksesKaprodiLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalHapusAksesKaprodiLabel">Konfirmasi Hapus Sebagai Kaprodi</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Apakah Anda yakin ingin membatalkan {{ $dp->name }} sebagai Kaprodi?
+                                                                </div>
+                                                                <form id="konfirmasiForm{{ $dp->id }}" action="{{ route('konfirmasi-hapus-kaprodi-admin', ['userId' => $dp->id]) }}" method="POST">
+                                                                    @csrf
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-success">Konfirmasi</button>
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal untuk konfirmasi "is kaprodi" -->
+                                                    <div class="modal fade" id="modalKonfirmasiKaprodi{{ $dp->id }}" tabindex="-1" aria-labelledby="modalKonfirmasiKaprodiLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalKonfirmasiKaprodiLabel">Konfirmasi Kaprodi</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form id="konfirmasiForm{{ $dp->id }}" action="{{ route('konfirmasi-kaprodi-admin', ['userId' => $dp->id]) }}" method="POST">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        Apakah Anda yakin ingin mengkonfirmasi {{ $dp->name }} sebagai Kaprodi?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn btn-success">Konfirmasi</button>
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                    
                                                     
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="modalUbahSandi{{ $dp->id }}" tabindex="-1" aria-labelledby="modalUbahSandiLabel{{ $dp->id }}" aria-hidden="true">
@@ -169,6 +230,59 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var myModal = new bootstrap.Modal(document.getElementById("modalUbahSandi{{ $dp->id }}"));
+    });
+</script>
+
+<script>
+    // Menggunakan jQuery untuk menangani klik tombol "Konfirmasi"
+    $('#modalKonfirmasiKaprodi{{ $dp->id }}').on('submit', 'form', function (event) {
+        event.preventDefault(); // Mencegah aksi default formulir
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    alert('Konfirmasi berhasil.');
+                    $('#modalKonfirmasiKaprodi{{ $dp->id }}').modal('hide');
+                    // Lakukan tindakan lain jika diperlukan
+                } else {
+                    alert('Konfirmasi gagal.');
+                }
+            },
+            error: function () {
+                alert('Terjadi kesalahan saat mengirim permintaan.');
+            }
+        });
+    });
+</script>
+<script>
+    // Menggunakan jQuery untuk menangani klik tombol "Konfirmasi"
+    $('#modalHapusAksesKaprodi{{ $dp->id }}').on('submit', 'form', function (event) {
+        event.preventDefault(); // Mencegah aksi default formulir
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    alert('Konfirmasi berhasil.');
+                    $('#modalHapusAksesKaprodi{{ $dp->id }}').modal('hide');
+                    // Lakukan tindakan lain jika diperlukan
+                } else {
+                    alert('Konfirmasi gagal.');
+                }
+            },
+            error: function () {
+                alert('Terjadi kesalahan saat mengirim permintaan.');
+            }
+        });
     });
 </script>
 @endsection

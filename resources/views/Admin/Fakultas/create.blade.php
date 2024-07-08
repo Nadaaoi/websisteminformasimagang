@@ -31,9 +31,9 @@
 </div>
 @endif
 
-    <h2 class="mt-4">Data Fakultas</h2>
+    <h2 class="mt-4">Tambah Data Fakultas</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Tambah Fakultas</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Manajemen Fakultas &raquo; Tambah Data Fakultas</h5>
 
     <div class="card-body overflow-auto">
         <form class="forms-sample" method="POST" action="{{ route('data-fakultas.store') }}">

@@ -28,7 +28,7 @@
 
     <h2 class="mt-4">Lihat Bimbingan</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Bimbingan &raquo; Lihat Bimbingan Ke-{{ $bimbingan->pertemuan }}</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Pencatatan Bimbingan &raquo; Lihat Bimbingan Ke-{{ $bimbingan->pertemuan }}</h5>
 
     <div class="card-body overflow-auto">
         <div class="col-sm-12">

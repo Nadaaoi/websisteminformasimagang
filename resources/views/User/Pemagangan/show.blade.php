@@ -32,9 +32,9 @@
 </div>
 @endif
 
-    <h2 class="mt-4">Pengajuan Status Pemagangan</h2>
+    <h2 class="mt-4">Detail Pengajuan Status Pemagangan</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Informasi Pemagangan</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Detail Pengajuan Status Pemagangan</h5>
 
     <div class="card-body overflow-auto">
         <div class="col-sm-12">

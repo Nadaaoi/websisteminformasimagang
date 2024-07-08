@@ -36,8 +36,8 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h2 class="mt-4">Form Bimbingan</h2>
-                <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Bimbingan</h5>
+                <h2 class="mt-4">Pencatatan Bimbingan</h2>
+                <h5 class="breadcrumb-item active">Dashboard &raquo; Pencatatan Bimbingan</h5>
             </div>
             
             <div class="card-body overflow-auto">

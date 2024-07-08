@@ -40,7 +40,7 @@
 
     <h2 class="mt-4">Buat Data Bimbingan</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Bimbingan &raquo; Buat Data Bimbingan</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Pencatatan Bimbingan &raquo; Buat Data Bimbingan</h5>
 
     <div class="card-body overflow-auto">
       <form action="/bimbingan/store/" method="POST" enctype="multipart/form-data">

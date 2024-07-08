@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\pembimbing;
 
 use App\Models\User;
 use App\Models\Pemagangan;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
-class DaftarPendaftarController extends ControllerResolver
+class DaftarPendaftarPembimbingController extends ControllerResolver
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class DaftarPendaftarController extends ControllerResolver
      */
     public function index(Request $request)
     {
-        if (Auth::user() && Auth::user()->roles == 'ADMIN' || 'PEMBIMBING') {
+        if (Auth::user() && Auth::user()->roles == 'PEMBIMBING') {
             $selectedYear = $request->input('year', date('Y'));
             
             $us = DB::table('pemagangans')
@@ -29,7 +29,7 @@ class DaftarPendaftarController extends ControllerResolver
                 ->orderByDesc('pemagangans.created_at')
                 ->get();
 
-            return view('admin.daftar-pendaftar.index', [
+            return view('pembimbing.daftar-pendaftar.index', [
                 'us' => $us,
                 'title' => 'Data Calon Magang',
                 'selectedYear' => $selectedYear
@@ -69,7 +69,7 @@ class DaftarPendaftarController extends ControllerResolver
 
      public function edit(Pemagangan $Pemagangan)
 {
-    if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+    if (Auth::user() && Auth::user()->roles == 'PEMBIMBING') {
         $title = 'Data Calon Magang';
         $pembimbingRole = User::where('roles', 'PEMBIMBING')->get();
         $user = User::where('id', $Pemagangan->user_id)->get();
@@ -78,7 +78,7 @@ class DaftarPendaftarController extends ControllerResolver
         $id_pembimbing = request('id_pembimbing_selected');
 
         // dd($pembimbingRole);
-        return view('admin.daftar-pendaftar.edit', [
+        return view('Pembimbing.daftar-pendaftar.edit', [
             'data' => $Pemagangan,
             'title' => $title,
             'pembimbingRole' => $pembimbingRole,
@@ -90,12 +90,12 @@ class DaftarPendaftarController extends ControllerResolver
 
 public function show(Pemagangan $Pemagangan)
 {
-    if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+    if (Auth::user() && Auth::user()->roles == 'PEMBIMBING') {
         $title = 'Data Calon Magang';
         $user = User::where('id', $Pemagangan->user_id)->get();
 
         // dd($pembimbingRole);
-        return view('admin.daftar-pendaftar.show', [
+        return view('Pembimbing.daftar-pendaftar.show', [
             'data' => $Pemagangan,
             'title' => $title,
             'user' => $user,
@@ -105,12 +105,12 @@ public function show(Pemagangan $Pemagangan)
 
 public function showbelummagang(Pemagangan $Pemagangan)
 {
-    if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+    if (Auth::user() && Auth::user()->roles == 'PEMBIMBING') {
         $title = 'Data Calon Magang';
         $user = User::where('id', $Pemagangan->user_id)->get();
 
         // dd($pembimbingRole);
-        return view('admin.daftar-pendaftar.showbelummagang', [
+        return view('Pembimbing.daftar-pendaftar.showbelummagang', [
             'data' => $Pemagangan,
             'title' => $title,
             'user' => $user,
@@ -135,33 +135,47 @@ public function showbelummagang(Pemagangan $Pemagangan)
      */
     public function update(Request $request, $id)
     {
-        $pic_wawancara_id = Auth::user()->id;
         $data = $request->all();
-        
-        if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+        // dd($data);
     
-            User::where('id', $id)->update([
-                'status_akun' => $data['status_pendaftar'],
-            ]);
+        if (Auth::user() && Auth::user()->roles == 'PEMBIMBING') {
     
-            $data['status_pendaftar'] = $request->input('status_pendaftar');
             $data['slug'] = $request->input('slug');
     
-            // Hapus bagian yang mengupdate nama pembimbing
     
-            Pemagangan::where('slug', $data['slug'])->update([
-                'statuspengajuan' => $data['status_pendaftar'],
-            ]);
+            $namapembimbing = $request->input('namapembimbing_selected');
     
-            Pemberitahuan::create([
-                'user_id' => $id,
-                'pic_pemberitahuan_id' => $pic_wawancara_id,
-                'pemberitahuan' => $data['pemberitahuan']
-            ]);
+            $user = User::where('name', $namapembimbing)->first();
     
+            if ($user) {
+                // Jika user dengan namapembimbing yang dipilih ditemukan, gunakan user_id tersebut
+                $user_id = $user->id;
+            } else {
+                // Jika tidak ditemukan, berikan nilai default atau berikan error sesuai kebutuhan
+                $user_id = null; // Atau bisa juga berikan nilai default berdasarkan kasus Anda
+                // Contoh: $user_id = 1; // Jika ingin memberikan nilai default berupa user_id tertentu
+            }
+    
+            $pemagangan = Pemagangan::where('slug', $data['slug'])->first();
+    
+            if ($pemagangan) {
+                // Jika data Pemagangan dengan user_id tersebut ditemukan, update field 'namapembimbing' dan 'id_pembimbing'
+                $pemagangan->namapembimbing = $data['namapembimbing'];
+                $pemagangan->id_pembimbing = $user_id;
+    
+                $pemagangan->save();
+            } else {
+                // Jika tidak ditemukan, buat data baru dengan user_id, namapembimbing, dan id_pembimbing
+                $pemagangan = Pemagangan::create([
+                    'user_id' => $id,
+                    'namapembimbing' => $data['namapembimbing'],
+                    'id_pembimbing' => $user_id
+                ]);
+            }
         }
+        
     
-        return redirect()->route('daftar-pendaftar.index')->with('success', 'Data Berhasil Disimpan!');
+        return redirect()->route('daftar-pendaftar-pembimbing.index')->with('success', 'Data Berhasil Disimpan!');
     }
     
 

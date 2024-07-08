@@ -36,8 +36,8 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h2 class="mt-4">Konfirmasi Pengajuan Status {{ $selectedYear }}</h2>
-                <h5 class="breadcrumb-item active">Dashboard &raquo; Konfirmasi Pengajuan Status</h5>
+                <h2 class="mt-4">Mapping Pembimbing dan Mahasiswa {{ $selectedYear }}</h2>
+                <h5 class="breadcrumb-item active">Dashboard &raquo; Mapping Pembimbing dan Mahasiswa</h5>
             </div>
 
             <div class="card-body overflow-auto">
@@ -109,21 +109,16 @@
                                         </td>
 
                                         <td>
-                                            @if ($u->statuspengajuan === 'TERDAFTAR')
-                                                @if ($u->programmagang === 'Belummagang')
-                                                <a href="/daftar-pendaftar/showbelummagang/{{ $u->slug }}" class="text-white text-decoration-none">
-                                                    <button type="button" class="btn btn-warning btn-sm" title="Lihat Data">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                @else
-                                                <a href="/daftar-pendaftar/edit/{{ $u->slug }}" class="text-white text-decoration-none">
-                                                    <button type="button" class="btn btn-warning btn-sm" title="Edit Data">
+                                            @if ($u->statuspengajuan === 'DITERIMA' && $u->id_pembimbing === null)
+                                                
+                                                <a href="/daftar-pendaftar-pembimbing/edit/{{ $u->slug }}" class="text-white text-decoration-none">
+                                                    <button type="button" class="btn btn-warning btn-sm" title="Tambahkan Pembimbing">
                                                         <i class="bi bi-pencil-square"></i>
                                                     </button>
                                                 </a>
-                                                @endif
+                                               
                                             @elseif ($u->statuspengajuan === 'DITERIMA'||'TIDAK DITERIMA')
-                                            <a href="/daftar-pendaftar/show/{{ $u->slug }}" class="text-white text-decoration-none">
+                                            <a href="/daftar-pendaftar-pembimbing/show/{{ $u->slug }}" class="text-white text-decoration-none">
                                                 <button type="button" class="btn btn-warning btn-sm" title="Lihat Data">
                                                     <i class="bi bi-eye"></i>
                                                 </button>

@@ -73,9 +73,9 @@
     </div>
     @endif
     
-    <h2 class="mt-4">Log Book Mahasiswa</h2>
+    <h2 class="mt-4">Pengisian Log Book Mahasiswa</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Log book</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Pengisian Log Book Mahasiswa</h5>
 
     <div class="mb-3">
         

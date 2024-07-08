@@ -34,7 +34,7 @@
 
     <h2 class="mt-4">Buat Pengajuan Status Pemagangan</h2>
     
-    <h5 class="breadcrumb-item active">Dashboard &raquo; Daftar Pengajuan Pemagangan &raquo; Buat Pengajuan</h5>
+    <h5 class="breadcrumb-item active">Dashboard &raquo; Pengajuan Status Pemagangan &raquo; Buat Pengajuan Status Pemagangan</h5>
 
           <div class="card-body overflow-auto">
             <form action="{{ route('pemagangan.store') }}" method="POST" enctype="multipart/form-data">

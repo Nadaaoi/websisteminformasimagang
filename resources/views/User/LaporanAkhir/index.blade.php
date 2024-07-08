@@ -63,12 +63,13 @@
             aria-describedby="basic-icon-default-company2"
             readonly
           />
+          <label label for="" class="text-muted text-danger" style="font-size: smaller">* Upload laporan akhir kamu harus dalam format PDF dengan ukuran maksimal 5 MB</label>
           @error('laporanakhir')
           <div class="invalid-feedback">
             {{ $message }}
           </div>
           @enderror
-        </div>
+        </div>  
       </div>
     </div>
   </div>
@@ -91,6 +92,7 @@
             aria-describedby="basic-icon-default-company2"
             readonly
           />
+          <label label for="" class="text-muted text-danger" style="font-size: smaller">* Sertifikat akhir kamu harus dalam format PDF dengan ukuran maksimal 5 MB</label>
           @error('sertifikat')
           <div class="invalid-feedback">
             {{ $message }}
@@ -119,6 +121,7 @@
             aria-describedby="basic-icon-default-company2"
             readonly
           />
+          <label label for="" id="p_buktipenerimaan" class="text-muted text-danger" style="font-size: smaller">* Bukti penerimaan magang kamu harus dalam format PDF dengan ukuran maksimal 5 MB</label>
           @error('nilai')
           <div class="invalid-feedback">
             {{ $message }}
